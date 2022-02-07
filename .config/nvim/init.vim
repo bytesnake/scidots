@@ -7,11 +7,12 @@ Plug 'plasticboy/vim-markdown'
 " syntax highlighting
 Plug 'morhetz/gruvbox'
 
+" highlight marks
+Plug 'inkarkat/vim-ingo-library'
+Plug 'inkarkat/vim-mark'
+
 " zotero citations are awesome
 Plug 'jalvesaq/zotcite'
-
-" vim image
-Plug 'AdamTillou/vim-imager'
 
 " linked notes
 Plug 'mattn/libcallex-vim', { 'do': 'make -C autoload' }
@@ -22,3 +23,4 @@ call plug#end()
 
 runtime look.vim
 runtime custom_bindings.vim
+runtime marks.vim
