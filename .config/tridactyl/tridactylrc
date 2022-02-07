@@ -1,0 +1,3 @@
+bind ,e composite get_current_url | exclaim_quiet stash_website epub
+bind ,p composite get_current_url | exclaim_quiet stash_website pdf
+bind ,m composite get_current_url | exclaim_quiet stash_website markdown

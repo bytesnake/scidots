@@ -1,0 +1,33 @@
+#!/bin/bash
+
+slugify () {
+    echo "$1" | iconv -t ascii//TRANSLIT | sed -r s/[~\^]+//g | sed -r s/[^a-zA-Z0-9]+/-/g | sed -r s/^-+\|-+$//g | tr A-Z a-z
+}
+
+# may also work: wget --no-parent -p -k <url> -P /tmp/stash/
+# download website
+wget $2 -O /tmp/website.html
+
+# extract title of website
+title="$(awk -vRS="</title>" '/<title>/{gsub(/.*<title>|\n+/,"");print;exit}' /tmp/website.html)"
+
+# slugify title and move file
+title=$(slugify "$title")
+mv /tmp/website.html /tmp/stash/$title.html
+
+htmlfile="/tmp/stash/$title.html"
+
+# convert for cases
+if [[ "$1" == "epub" ]]; then
+    file="${htmlfile%"html"}epub"
+    pandoc -f html -t epub3 -o $file $htmlfile
+    foliate $file
+elif [[ "$1" == "pdf" ]]; then
+    file="${htmlfile%"html"}pdf"
+    pandoc -t html -o $file $htmlfile 
+    evince $file
+elif [[ "$1" == "markdown" ]]; then
+    file="${htmlfile%"html"}md"
+    html2text --images-to-alt $htmlfile > $file
+    terminator -e "vim $file"
+fi;

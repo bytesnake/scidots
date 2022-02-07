@@ -1,0 +1,36 @@
+#!/bin/env python
+import popplerqt5
+import argparse
+import PyQt5
+
+def extract_from_pdf(file):
+    doc = popplerqt5.Poppler.Document.load(file)
+    total_annotations = 0
+    for i in range(doc.numPages()):
+        page = doc.page(i)
+        annotations = page.annotations()
+        (pwidth, pheight) = (page.pageSize().width(), page.pageSize().height())
+        if len(annotations) > 0:
+            for annotation in annotations:
+                if  isinstance(annotation, popplerqt5.Poppler.Annotation):
+                    total_annotations += 1
+                    if(isinstance(annotation, popplerqt5.Poppler.HighlightAnnotation)):
+                        quads = annotation.highlightQuads()
+                        txt = ""
+                        for quad in quads:
+                            rect = (quad.points[0].x() * pwidth,
+                                    quad.points[0].y() * pheight,
+                                    quad.points[2].x() * pwidth,
+                                    quad.points[2].y() * pheight)
+                            bdy = PyQt5.QtCore.QRectF()
+                            bdy.setCoords(*rect)
+                            txt = txt + str(page.text(bdy)) + ' '
+
+                        txt = str(txt).strip()
+                        print("> {} - [source]({}#{})".format(txt, str(file), txt[:30]))
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('fn')
+    args = parser.parse_args()
+    extract_from_pdf(args.fn)
