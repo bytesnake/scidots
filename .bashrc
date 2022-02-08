@@ -1,7 +1,7 @@
 # default Bash configuration
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
+# set path to papers
+export P=$HOME/Notes/content/arbeitsbuch/papers
 
 if [ -f ~/.bashrc_local ]; then
     source ~/.bashrc_local
@@ -12,13 +12,16 @@ export EDITOR=/usr/bin/vim
 export VISUAL=/usr/bin/vim
 export TERMINAL=/usr/bin/terminator
 
-# set path to papers
-export P=$HOME/Notes/content/arbeitsbuch/papers/
+# If not running interactively, don't do more
+[[ $- != *i* ]] && return
 
 # add colors
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias wanip='dig +short myip.opendns.com @resolver1.opendns.com'
+
+# add vim to neovim shorcut
+alias vim='nvim'
 
 # shorcut for weather
 weather() {
