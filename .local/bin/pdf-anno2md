@@ -26,8 +26,20 @@ def extract_from_pdf(file):
                             bdy.setCoords(*rect)
                             txt = txt + str(page.text(bdy)) + ' '
 
+                        # format to max length of 80chars
+                        sent_len = 0
+                        words = []
                         txt = str(txt).strip()
-                        print("> {} - [source]({}#{})".format(txt, str(file), txt[:30]))
+                        for word in txt.split(" "):
+                            if sent_len + len(word) > 80:
+                                print(" > {}".format(" ".join(words)))
+                                sent_len = 0
+                                words = []
+                            else:
+                                words.append(word)
+                                sent_len += len(word) + 1
+                        
+                        print(" > [source]({}#{})\n".format(str(file), txt[:30]))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
