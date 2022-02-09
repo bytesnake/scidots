@@ -63,6 +63,8 @@ yt-chan() {
 
 # use Vi mode for Bash
 set -o vi
+# use jk for exiting the insert mode
+bind '"jk":vi-movement-mode'
 
 jobscount() {
   local stopped=$(jobs -sp | wc -l)

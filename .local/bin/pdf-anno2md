@@ -39,6 +39,7 @@ def extract_from_pdf(file):
                                 words.append(word)
                                 sent_len += len(word) + 1
                         
+                        print(" > {}".format(" ".join(words)))
                         print(" > [source]({}#{})\n".format(str(file), txt[:30]))
 
 if __name__ == '__main__':
