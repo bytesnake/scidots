@@ -4,6 +4,8 @@ import argparse
 import PyQt5
 
 def extract_from_pdf(file):
+    print("vim: set filetype=markdown.linked :\n")
+
     doc = popplerqt5.Poppler.Document.load(file)
     total_annotations = 0
     for i in range(doc.numPages()):
@@ -26,21 +28,27 @@ def extract_from_pdf(file):
                             bdy.setCoords(*rect)
                             txt = txt + str(page.text(bdy)) + ' '
 
-                        # format to max length of 80chars
-                        sent_len = 0
-                        words = []
                         txt = str(txt).strip()
-                        for word in txt.split(" "):
-                            if sent_len + len(word) > 80:
+                        if len(txt) > 20:
+                            # format to max length of 80chars
+                            sent_len = 0
+                            words = []
+                            for word in txt.split(" "):
+                                if sent_len + len(word) > 80:
+                                    print(" > {}".format(" ".join(words)))
+                                    sent_len = 0
+                                    words = []
+                                else:
+                                    words.append(word)
+                                    sent_len += len(word) + 1
+                            
+                            if sent_len + len(" source") > 80:
                                 print(" > {}".format(" ".join(words)))
-                                sent_len = 0
-                                words = []
+                                print(" > [source]({}#{})\n".format(str(file), txt[:30]))
                             else:
-                                words.append(word)
-                                sent_len += len(word) + 1
-                        
-                        print(" > {}".format(" ".join(words)))
-                        print(" > [source]({}#{})\n".format(str(file), txt[:30]))
+                                print(" > {} [source]({}#{})\n".format(" ".join(words), str(file), txt[:30]))
+                        else:
+                            print(" > [{}]({}#{})\n".format(txt, str(file), txt))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
