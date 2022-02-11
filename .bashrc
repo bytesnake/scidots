@@ -8,8 +8,8 @@ if [ -f ~/.bashrc_local ]; then
 fi
 
 # use Vim and terminator as terminal
-export EDITOR=/usr/bin/vim
-export VISUAL=/usr/bin/vim
+export EDITOR=/usr/bin/nvim
+export VISUAL=/usr/bin/nvim
 export TERMINAL=/usr/bin/terminator
 
 # If not running interactively, don't do more
