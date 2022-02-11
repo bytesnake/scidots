@@ -1,7 +1,7 @@
 # default Bash configuration
 
 # set path to papers
-export P=$HOME/Notes/content/arbeitsbuch/papers
+export P=$HOME/Notes/papers
 
 if [ -f ~/.bashrc_local ]; then
     source ~/.bashrc_local
@@ -23,6 +23,18 @@ alias wanip='dig +short myip.opendns.com @resolver1.opendns.com'
 # add vim to neovim shorcut
 alias vim='nvim'
 
+# extract DOI/arxiv ID and download BibTex of a PDF file
+tobib() {
+	if ! command -v xapers &> /dev/null
+	then
+		echo "Please install xapers for DOI and BibTex download"
+		exit
+	fi
+
+	xapers source2bib "$(xapers scandoc $@ | head -n 1)"
+}
+	
+
 # shorcut for weather
 weather() {
 	curl -4 http://wttr\.in/$1
@@ -41,7 +53,7 @@ timer() {
     fi
 }
 
-function forever() {
+forever() {
 	AMOUNT=$1
 	shift
 	while :
