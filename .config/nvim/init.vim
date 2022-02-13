@@ -21,6 +21,9 @@ Plug '/home/lorenz/Documents/projects/vim-math', { 'do': 'cargo install --releas
 
 call plug#end()
 
+" set spell checking to english+german
+set spelllang=en_us,de
+
 runtime look.vim
 runtime custom_bindings.vim
 runtime marks.vim
