@@ -19,6 +19,7 @@ export TERMINAL=/usr/bin/terminator
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias wanip='dig +short myip.opendns.com @resolver1.opendns.com'
+alias passold='PASSWORD_STORE_DIR=.password-store-old/ pass'
 
 # add vim to neovim shorcut
 alias vim='nvim'
