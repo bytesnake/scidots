@@ -29,6 +29,8 @@ call plug#end()
 
 " set spell checking to english+german
 set spelllang=en_us,de
+" add special rule for mutt mails
+au BufRead /tmp/mutt-* set tw=72
 
 runtime look.vim
 runtime custom_bindings.vim

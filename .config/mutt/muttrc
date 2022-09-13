@@ -1,0 +1,48 @@
+# set up IMAP
+set folder=imap://fe07gixu@groupware.fau.de:143/
+set imap_user=lopa.schmidt@fau.de
+set imap_pass="`pass show sso.uni-erlangen.de/fe07gixu`"
+set spoolfile=+INBOX
+mailboxes = +INBOX
+
+# use all folders
+set imap_list_subscribed=no
+set imap_check_subscribed
+
+# setup SMTP
+set realname = "Lorenz Schmidt"
+set from = "lopa.schmidt@fau.de"
+set use_from=yes
+set record = +Sent
+set smtp_pass=$imap_pass
+set smtp_url=smtp://fe07gixu@groupware.fau.de:587
+set ssl_force_tls = yes
+set ssl_starttls = yes
+
+# setup cache and interval checking
+set header_cache = ~/.cache/mutt
+set message_cachedir = "~/.cache/mutt"
+unset imap_passive
+set imap_keepalive = 300
+set mail_check = 120
+set send_charset="us-ascii:utf-8"
+
+# use vi keybindings
+bind pager j next-line
+bind pager k previous-line
+bind attach,index,pager \CD next-page
+bind attach,index,pager \CU previous-page
+bind pager g top
+bind pager G bottom
+bind attach,index g first-entry
+bind attach,index G last-entry
+
+# Status Bar -----------------------------------------
+set status_chars  = " *%A"
+set status_format = "───[ Folder: %f ]───[%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]───%>─%?p?( %p postponed )?───"
+
+# set up theme
+source gruvbox/colors-gruvbox-shuber.muttrc
+source sidebar
+
+alias simone.neukam \"Neukam, Simone\" <simone.neukam@iis.fraunhofer.de>
