@@ -37,6 +37,9 @@ bind pager G bottom
 bind attach,index g first-entry
 bind attach,index G last-entry
 
+# attach group reply to capital reply
+bind index,pager R group-reply
+
 # Status Bar -----------------------------------------
 set status_chars  = " *%A"
 set status_format = "───[ Folder: %f ]───[%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]───%>─%?p?( %p postponed )?───"
@@ -44,5 +47,4 @@ set status_format = "───[ Folder: %f ]───[%r%m messages%?n? (%n new)
 # set up theme
 source gruvbox/colors-gruvbox-shuber.muttrc
 source sidebar
-
-alias simone.neukam \"Neukam, Simone\" <simone.neukam@iis.fraunhofer.de>
+source aliases

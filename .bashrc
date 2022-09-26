@@ -13,7 +13,7 @@ export VISUAL=/usr/bin/nvim
 export TERMINAL=/usr/bin/terminator
 
 # add local binaries to path
-export PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:$HOME/.local/bin:$HOME/.cargo/bin/
 
 # If not running interactively, don't do more
 [[ $- != *i* ]] && return

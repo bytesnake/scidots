@@ -32,6 +32,10 @@ set spelllang=en_us,de
 " add special rule for mutt mails
 au BufRead /tmp/mutt-* set tw=72
 
+" use cfilter for quickfix narrowing
+packadd cfilter
+cnoreabbrev cf Cfilter
+
 runtime look.vim
 runtime custom_bindings.vim
 runtime marks.vim
