@@ -16,21 +16,34 @@ Plug 'jalvesaq/zotcite'
 
 " linked notes
 Plug 'mattn/libcallex-vim', { 'do': 'make -C autoload' }
-Plug '/home/lorenz/Documents/projects/vim-linked', { 'do': 'cargo install --release' }
-Plug '/home/lorenz/Documents/projects/vim-math', { 'do': 'cargo install --release' }
+Plug 'bytesnake/vim-linked', { 'do': 'cargo build --release' }
+Plug 'bytesnake/vim-graphical-preview', { 'do': 'cargo build --release' }
+"Plug '/home/losch/Documents/vim-graphical-preview', { 'do': 'cargo build --release' }
 
 " Collection of common configurations for the Nvim LSP client
-Plug 'neovim/nvim-lspconfig'
+"Plug 'neovim/nvim-lspconfig'
+
+" Completion framework
+"Plug 'hrsh7th/nvim-cmp'
+
+" LSP completion source for nvim-cmp
+"Plug 'hrsh7th/cmp-nvim-lsp'
+
+" Snippet completion source for nvim-cmp
+"Plug 'hrsh7th/cmp-vsnip'
 
 " Adds extra functionality over rust analyzer
-Plug 'simrat39/rust-tools.nvim'
+"Plug 'simrat39/rust-tools.nvim'
 
 call plug#end()
 
 " set spell checking to english+german
 set spelllang=en_us,de
 
+packadd cfilter
+cnoreabbrev cf Cfilter
+
 runtime look.vim
 runtime custom_bindings.vim
 runtime marks.vim
-runtime rust-analyzer.vim
+"runtime rust-analyzer.vim
