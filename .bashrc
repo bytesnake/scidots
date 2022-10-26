@@ -24,6 +24,9 @@ alias passold='PASSWORD_STORE_DIR=.password-store-old/ pass'
 # add vim to neovim shorcut
 alias vim='nvim'
 
+# set mutt as alias to neomutt
+alias mutt='neomutt'
+
 # extract DOI/arxiv ID and download BibTex of a PDF file
 tobib() {
 	if ! command -v xapers &> /dev/null
@@ -74,6 +77,20 @@ yt-chan() {
 	youtube-dl -i -o "%(title)s.%(ext)s" --extract-audio http://www.youtube.com/user/"$1"
 }
 
+function pomo() {
+    arg1=$1
+    shift
+    args="$*"
+
+    min=${arg1:?Example: pomo 15 Take a break}
+    sec=$((min * 60))
+    msg="${args:?Example: pomo 15 Take a break}"
+
+    while true; do
+        date '+%H:%M' && sleep "${sec:?}" && notify-send -u critical -t 0 -a pomo "${msg:?}" && sleep 300
+    done
+}
+
 # use Vi mode for Bash
 set -o vi
 # use jk for exiting the insert mode
@@ -87,3 +104,20 @@ jobscount() {
 
 # more colors and job count in prompt
 PS1='\[\e[1;31m\]\u\[\e[m\] \[\e[1;36m\]$(jobscount)\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[0;31m\]\$ \[\e[m\]\[\e[1;0m\]'
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/losch/.miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/losch/.miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/losch/.miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/losch/.miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+source /etc/profile.d/bash_completion.sh
