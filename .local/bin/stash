@@ -3,7 +3,19 @@ import popplerqt5
 import argparse
 import PyQt5
 from pathlib import Path
-import os, sys
+import os, sys, re
+
+def sanitize(name):
+    words = list(filter(None, re.split("[, \-!?:]+", name)))
+    print(words)
+    return "-".join(words)
+
+def extract_from_marks(path):
+    link_re = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+
+    with open(path, "r") as f:
+        return list(link_re.findall(f.read()))
+            
 
 def extract_from_pdf(file):
     # get output path
@@ -67,4 +79,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('fn')
     args = parser.parse_args()
-    extract_from_pdf(args.fn)
+
+    # create sanitized filename from source
+    path = Path(args.fn)
+    filename = sanitize(path.stem)
+
+
+    # extract all links from original source
+    print(extract_from_marks(args.fn))
+
+    #extract_from_pdf(args.fn)
