@@ -39,6 +39,12 @@ call plug#end()
 
 " set spell checking to english+german
 set spelllang=en_us,de
+" add special rule for mutt mails
+au BufRead /tmp/mutt-* set tw=72
+
+" use cfilter for quickfix narrowing
+packadd cfilter
+cnoreabbrev cf Cfilter
 
 packadd cfilter
 cnoreabbrev cf Cfilter
