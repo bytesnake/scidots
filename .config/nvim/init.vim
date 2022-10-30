@@ -46,8 +46,8 @@ au BufRead /tmp/mutt-* set tw=72
 packadd cfilter
 cnoreabbrev cf Cfilter
 
-packadd cfilter
-cnoreabbrev cf Cfilter
+" add stashing feature
+command -nargs=? -complete=file Stash :!stash <args>
 
 runtime look.vim
 runtime custom_bindings.vim

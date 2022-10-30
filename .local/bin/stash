@@ -3,77 +3,65 @@ import popplerqt5
 import argparse
 import PyQt5
 from pathlib import Path
-import os, sys, re
+import os, sys, re, shutil
 
 def sanitize(name):
     words = list(filter(None, re.split("[, \-!?:]+", name)))
-    print(words)
     return "-".join(words)
 
-def extract_from_marks(path):
+def extract_from_md(path):
     link_re = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
 
     with open(path, "r") as f:
-        return list(link_re.findall(f.read()))
+        elms = map(lambda x: x[1].split('#', 1)[1], link_re.findall(f.read()))
+        return set(elms)
+
+def extract_links_from_md(path):
+    link_re = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+
+    with open(path, "r") as f:
+        elms = map(lambda x: x[1].split('#', 1)[0], link_re.findall(f.read()))
+        return set(elms)
             
 
 def extract_from_pdf(file):
-    # get output path
-    paper_path = os.environ.get('P')
-    if not paper_path:
-        sys.exit("Could not find environment $P")
-    file_relative = "$P/" + str(Path(file).relative_to(paper_path))
-
-    print("vim: set filetype=markdown.linked :\n")
-
-    doc = popplerqt5.Poppler.Document.load(file)
-    total_annotations = 0
+    doc = popplerqt5.Poppler.Document.load(str(file))
+    collected = []
     for i in range(doc.numPages()):
         page = doc.page(i)
         annotations = page.annotations()
         (pwidth, pheight) = (page.pageSize().width(), page.pageSize().height())
-        if len(annotations) > 0:
-            for annotation in annotations:
-                if  isinstance(annotation, popplerqt5.Poppler.Annotation):
-                    total_annotations += 1
-                    if(isinstance(annotation, popplerqt5.Poppler.HighlightAnnotation)):
-                        quads = annotation.highlightQuads()
-                        txt = ""
-                        link_txt = ""
-                        for quad in quads:
-                            rect = (quad.points[0].x() * pwidth,
-                                    quad.points[0].y() * pheight,
-                                    quad.points[2].x() * pwidth,
-                                    quad.points[2].y() * pheight)
-                            bdy = PyQt5.QtCore.QRectF()
-                            bdy.setCoords(*rect)
-                            new_txt = str(page.text(bdy)) 
-                            txt = txt + new_txt + ' '
+        if len(annotations) == 0:
+            continue
 
-                            if len(new_txt) > len(link_txt):
-                                link_txt = new_txt
+        for annotation in annotations:
+            if  isinstance(annotation, popplerqt5.Poppler.Annotation):
+                if(isinstance(annotation, popplerqt5.Poppler.HighlightAnnotation)):
+                    quads = annotation.highlightQuads()
+                    txt = ""
+                    link_txt = ""
+                    for quad in quads:
+                        rect = (quad.points[0].x() * pwidth,
+                                quad.points[0].y() * pheight,
+                                quad.points[2].x() * pwidth,
+                                quad.points[2].y() * pheight)
+                        bdy = PyQt5.QtCore.QRectF()
+                        bdy.setCoords(*rect)
+                        new_txt = str(page.text(bdy)) 
+                        txt = txt + new_txt
 
-                        txt = str(txt).strip()
-                        if len(txt) > 20:
-                            # format to max length of 80chars
-                            sent_len = 0
-                            words = []
-                            for word in txt.split(" "):
-                                if sent_len + len(word) > 80:
-                                    print(" > {}".format(" ".join(words)))
-                                    sent_len = 0
-                                    words = []
-                                else:
-                                    words.append(word)
-                                    sent_len += len(word) + 1
-                            
-                            if sent_len + len(" source") > 80:
-                                print(" > {}".format(" ".join(words)))
-                                print(" > [source]({}#{})\n".format(str(file_relative), link_txt))
-                            else:
-                                print(" > {} [source]({}#{})\n".format(" ".join(words), str(file_relative), link_txt))
-                        else:
-                            print(" > [{}]({}#{})\n".format(txt, str(file_relative), link_txt))
+                        if len(new_txt) > len(link_txt):
+                            link_txt = new_txt
+
+                        link_txt = link_txt.strip()
+
+                        # sanitaze brackets
+                        link_txt = link_txt.replace("(", "{").replace(")", "}")
+
+                        collected.append(link_txt)
+
+    return set(collected)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -82,10 +70,60 @@ if __name__ == '__main__':
 
     # create sanitized filename from source
     path = Path(args.fn)
-    filename = sanitize(path.stem)
 
+    if path.name.endswith(".marks.md"):
+        # get links in mark file (and ensure that they all point to the same file)
+        links = extract_links_from_md(path)
+        assert len(links) == 1
 
-    # extract all links from original source
-    print(extract_from_marks(args.fn))
+        source_path = Path(links.pop())
+    else:
+        filename = sanitize(path.stem)
+        source_path = (Path(os.environ["P"]) / "stash" / filename).with_suffix(path.suffix)
 
-    #extract_from_pdf(args.fn)
+        # check whether file is already in stash folder
+        if not source_path.exists():
+            shutil.copy(path, source_path)
+
+    print("Extract from " + str(source_path))
+    if source_path.suffix == ".pdf":
+        mark_path = source_path.with_suffix(".marks.md")
+
+        # extract all annotations from PDF
+        annots_pdf = extract_from_pdf(source_path)
+        # extract links from markdown
+        annots_md = extract_from_md(mark_path)
+
+        # create dummy file
+        if len(annots_pdf) == 0:
+            with open(mark_path, "w") as f:
+                f.write("vim: filetype=markdown.linked :\n")
+                f.write("[source](" + str(source_path) + ")\n")
+        else:
+            f = open(mark_path, "a")
+            # get negative intersection and append to markdown file
+            for content in annots_pdf.difference(annots_md):
+                a = "{}#{}".format(source_path, content)
+
+                if len(content) > 20:
+                    # format to max length of 80chars
+                    sent_len = 0
+                    words = []
+                    for word in content.split(" "):
+                        if sent_len + len(word) > 80:
+                            f.write(" > {}".format(" ".join(words)))
+                            sent_len = 0
+                            words = []
+                        else:
+                            words.append(word)
+                            sent_len += len(word) + 1
+                    
+                    if sent_len + len(" source") > 80:
+                        f.write(" > {}".format(" ".join(words)))
+                        f.write(" > [source]({})\n".format(a))
+                    else:
+                        f.write(" > {} [source]({})\n".format(" ".join(words), a))
+                else:
+                    f.write(" > [{}]({})\n".format(content, a))
+
+            f.close()
