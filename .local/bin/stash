@@ -12,15 +12,22 @@ def sanitize(name):
 def extract_from_md(path):
     link_re = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
 
+    if not path.exists():
+        return set()
+
     with open(path, "r") as f:
-        elms = map(lambda x: x[1].split('#', 1)[1], link_re.findall(f.read()))
+        links = filter(lambda x: x[1].startswith("/") or x[1].startswith("$"), link_re.findall(f.read()))
+        elms = map(lambda x: x[1].split('#', 1)[1], links)
+
         return set(elms)
 
 def extract_links_from_md(path):
     link_re = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
 
     with open(path, "r") as f:
-        elms = map(lambda x: x[1].split('#', 1)[0], link_re.findall(f.read()))
+        links = filter(lambda x: x[1].startswith("/") or x[1].startswith("$"), link_re.findall(f.read()))
+        elms = map(lambda x: os.path.expandvars(x[1].split('#', 1)[0]), links)
+
         return set(elms)
             
 
@@ -85,7 +92,6 @@ if __name__ == '__main__':
         if not source_path.exists():
             shutil.copy(path, source_path)
 
-    print("Extract from " + str(source_path))
     if source_path.suffix == ".pdf":
         mark_path = source_path.with_suffix(".marks.md")
 
@@ -100,7 +106,12 @@ if __name__ == '__main__':
                 f.write("vim: filetype=markdown.linked :\n")
                 f.write("[source](" + str(source_path) + ")\n")
         else:
-            f = open(mark_path, "a")
+            if mark_path.exists():
+                f = open(mark_path, "a")
+            else:
+                f = open(mark_path, "w")
+                f.write("vim: filetype=markdown.linked :\n")
+
             # get negative intersection and append to markdown file
             for content in annots_pdf.difference(annots_md):
                 a = "{}#{}".format(source_path, content)
@@ -127,3 +138,5 @@ if __name__ == '__main__':
                     f.write(" > [{}]({})\n".format(content, a))
 
             f.close()
+
+    print(" - [{}]({})".format(mark_path.stem, mark_path))

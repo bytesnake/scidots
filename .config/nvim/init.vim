@@ -47,7 +47,7 @@ packadd cfilter
 cnoreabbrev cf Cfilter
 
 " add stashing feature
-command -nargs=? -complete=file Stash :!stash <args>
+command -nargs=? -complete=file Stash :read !stash <args>
 
 runtime look.vim
 runtime custom_bindings.vim
