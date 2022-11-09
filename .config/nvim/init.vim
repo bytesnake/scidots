@@ -16,21 +16,37 @@ Plug 'jalvesaq/zotcite'
 
 " linked notes
 Plug 'mattn/libcallex-vim', { 'do': 'make -C autoload' }
-Plug '/home/lorenz/Documents/projects/vim-linked', { 'do': 'cargo install --release' }
-Plug '/home/lorenz/Documents/projects/vim-math', { 'do': 'cargo install --release' }
+Plug 'bytesnake/vim-linked', { 'do': 'cargo install --release' }
+Plug 'bytesnake/vim-graphical-preview', { 'do': 'cargo install --release' }
 
 " Collection of common configurations for the Nvim LSP client
 Plug 'neovim/nvim-lspconfig'
 
 " Adds extra functionality over rust analyzer
 Plug 'simrat39/rust-tools.nvim'
+Plug 'mfussenegger/nvim-dap'
+Plug 'nvim-lua/plenary.nvim'
 
 call plug#end()
 
 " set spell checking to english+german
 set spelllang=en_us,de
 
+function! GetSyntaxID()
+    return synID(line('.'), col('.'), 1)
+endfunction
+
+function! GetSyntaxParentID()
+    return synIDtrans(GetSyntaxID())
+endfunction
+
+function! GetSyntax()
+    echo synIDattr(GetSyntaxID(), 'name')
+    exec "hi ".synIDattr(GetSyntaxParentID(), 'name')
+endfunction
+
 runtime look.vim
 runtime custom_bindings.vim
 runtime marks.vim
 runtime rust-analyzer.vim
+

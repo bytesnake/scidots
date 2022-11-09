@@ -19,7 +19,7 @@ export TERMINAL=/usr/bin/terminator
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias wanip='dig +short myip.opendns.com @resolver1.opendns.com'
-alias passold='PASSWORD_STORE_DIR=.password-store-old/ pass'
+alias passold='PASSWORD_STORE_DIR=$HOME/.password-store-old/ pass'
 
 # add vim to neovim shorcut
 alias vim='nvim'
@@ -72,6 +72,20 @@ yt-track() {
 
 yt-chan() { 
 	youtube-dl -i -o "%(title)s.%(ext)s" --extract-audio http://www.youtube.com/user/"$1"
+}
+
+function pomo() {
+    arg1=$1
+    shift
+    args="$*"
+
+    min=${arg1:?Example: pomo 15 Take a break}
+    sec=$((min * 60))
+    msg="${args:?Example: pomo 15 Take a break}"
+
+    while true; do
+        date '+%H:%M' && sleep "${sec:?}" && notify-send -u critical -t 0 -a pomo "${msg:?}" && sleep 300
+    done
 }
 
 # use Vi mode for Bash
