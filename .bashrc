@@ -12,6 +12,9 @@ export EDITOR=/usr/bin/nvim
 export VISUAL=/usr/bin/nvim
 export TERMINAL=/usr/bin/terminator
 
+# add local binaries to path
+export PATH=$PATH:$HOME/.local/bin:$HOME/.cargo/bin/
+
 # If not running interactively, don't do more
 [[ $- != *i* ]] && return
 
@@ -23,6 +26,9 @@ alias passold='PASSWORD_STORE_DIR=$HOME/.password-store-old/ pass'
 
 # add vim to neovim shorcut
 alias vim='nvim'
+
+# set mutt as alias to neomutt
+alias mutt='neomutt'
 
 # extract DOI/arxiv ID and download BibTex of a PDF file
 tobib() {
@@ -101,3 +107,20 @@ jobscount() {
 
 # more colors and job count in prompt
 PS1='\[\e[1;31m\]\u\[\e[m\] \[\e[1;36m\]$(jobscount)\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[0;31m\]\$ \[\e[m\]\[\e[1;0m\]'
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/losch/.miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/losch/.miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/losch/.miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/losch/.miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+source /etc/profile.d/bash_completion.sh
