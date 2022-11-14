@@ -1,7 +1,7 @@
 # default Bash configuration
 
 # set path to papers
-export P=$HOME/Notes/papers
+export P=$HOME/Note/papers
 
 if [ -f ~/.bashrc_local ]; then
     source ~/.bashrc_local
@@ -23,6 +23,7 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias wanip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias passold='PASSWORD_STORE_DIR=.password-store-old/ pass'
+alias epub2pdf='pandoc -V geometry:margin=0.5in -V papersize:a5 -f epub -t pdf'
 
 # add vim to neovim shorcut
 alias vim='nvim'
@@ -123,4 +124,4 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-source /etc/profile.d/bash_completion.sh
+#source /etc/profile.d/bash_completion.sh
