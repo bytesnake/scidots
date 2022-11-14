@@ -22,8 +22,8 @@ export PATH=$PATH:$HOME/.local/bin:$HOME/.cargo/bin/
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias wanip='dig +short myip.opendns.com @resolver1.opendns.com'
-alias passold='PASSWORD_STORE_DIR=.password-store-old/ pass'
 alias epub2pdf='pandoc -V geometry:margin=0.5in -V papersize:a5 -f epub -t pdf'
+alias passold='PASSWORD_STORE_DIR=$HOME/.password-store-old/ pass'
 
 # add vim to neovim shorcut
 alias vim='nvim'
