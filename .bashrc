@@ -1,7 +1,7 @@
 # default Bash configuration
 
 # set path to papers
-export P=$HOME/Notes/papers
+export P=$HOME/Note/papers
 
 if [ -f ~/.bashrc_local ]; then
     source ~/.bashrc_local
