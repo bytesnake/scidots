@@ -16,9 +16,8 @@ Plug 'jalvesaq/zotcite'
 
 " linked notes
 Plug 'mattn/libcallex-vim', { 'do': 'make -C autoload' }
-Plug 'bytesnake/vim-linked', { 'do': 'cargo build --release' }
-Plug 'bytesnake/vim-graphical-preview', { 'do': 'cargo build --release' }
-"Plug '/home/losch/Documents/vim-graphical-preview', { 'do': 'cargo build --release' }
+Plug 'bytesnake/vim-linked', { 'do': 'cargo install --release' }
+Plug 'bytesnake/vim-graphical-preview', { 'do': 'cargo install --release' }
 
 " Collection of common configurations for the Nvim LSP client
 "Plug 'neovim/nvim-lspconfig'
@@ -33,7 +32,9 @@ Plug 'bytesnake/vim-graphical-preview', { 'do': 'cargo build --release' }
 "Plug 'hrsh7th/cmp-vsnip'
 
 " Adds extra functionality over rust analyzer
-"Plug 'simrat39/rust-tools.nvim'
+Plug 'simrat39/rust-tools.nvim'
+Plug 'mfussenegger/nvim-dap'
+Plug 'nvim-lua/plenary.nvim'
 
 call plug#end()
 
@@ -49,7 +50,20 @@ cnoreabbrev cf Cfilter
 " add stashing feature
 command -nargs=? -complete=file Stash :read !stash <args>
 
+function! GetSyntaxID()
+    return synID(line('.'), col('.'), 1)
+endfunction
+
+function! GetSyntaxParentID()
+    return synIDtrans(GetSyntaxID())
+endfunction
+
+function! GetSyntax()
+    echo synIDattr(GetSyntaxID(), 'name')
+    exec "hi ".synIDattr(GetSyntaxParentID(), 'name')
+endfunction
+
 runtime look.vim
 runtime custom_bindings.vim
 runtime marks.vim
-"runtime rust-analyzer.vim
+" runtime rust-analyzer.vim

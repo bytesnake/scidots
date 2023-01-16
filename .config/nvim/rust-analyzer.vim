@@ -44,7 +44,7 @@ local opts = {
                                 --        },
                                 --
                                 procMacro = {
-                                        enable = false
+                                        enable = true
                                         },
                                 cargo = {
                                     runBuildScripts = false
