@@ -66,4 +66,4 @@ endfunction
 runtime look.vim
 runtime custom_bindings.vim
 runtime marks.vim
-runtime rust-analyzer.vim
+" runtime rust-analyzer.vim
