@@ -1,7 +1,7 @@
 # default Bash configuration
 
 # set path to papers
-export P=$HOME/Notes/papers
+export P=$HOME/Note/papers
 
 if [ -f ~/.bashrc_local ]; then
     source ~/.bashrc_local
@@ -124,3 +124,6 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 source /etc/profile.d/bash_completion.sh
+
+# expand shell variables on autocomplete
+shopt -s direxpand
