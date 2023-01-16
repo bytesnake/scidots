@@ -17,7 +17,7 @@ def extract_from_md(path):
 
     with open(path, "r") as f:
         links = filter(lambda x: x[1].startswith("/") or x[1].startswith("$"), link_re.findall(f.read()))
-        elms = map(lambda x: x[1].split('#', 1)[1], links)
+        elms = map(lambda x: x[1].split('#', 1)[1] if x[1].count("#") > 0 else x[1], links)
 
         return set(elms)
 
@@ -26,9 +26,12 @@ def extract_links_from_md(path):
 
     with open(path, "r") as f:
         links = filter(lambda x: x[1].startswith("/") or x[1].startswith("$"), link_re.findall(f.read()))
-        elms = map(lambda x: os.path.expandvars(x[1].split('#', 1)[0]), links)
+        elms = map(lambda x: x[1].split('#', 1)[0], links)
 
         return set(elms)
+
+def expand_path(link):
+    return Path(os.path.expandvars(link))
             
 
 def extract_from_pdf(file):
@@ -86,14 +89,17 @@ if __name__ == '__main__':
         source_path = Path(links.pop())
     else:
         filename = sanitize(path.stem)
-        source_path = (Path(os.environ["P"]) / "stash" / filename).with_suffix(path.suffix)
+        source_path = (Path("$P/stash") / filename).with_suffix(path.suffix)
 
-        # check whether file is already in stash folder
-        if not source_path.exists():
-            shutil.copy(path, source_path)
+    source_path, source_name = expand_path(source_path), source_path
+
+    # check whether file is already in stash folder
+    if not source_path.exists():
+        shutil.copy(path, source_path)
 
     if source_path.suffix == ".pdf":
         mark_path = source_path.with_suffix(".marks.md")
+        mark_name = source_name.with_suffix(".marks.md")
 
         # extract all annotations from PDF
         annots_pdf = extract_from_pdf(source_path)
@@ -104,7 +110,7 @@ if __name__ == '__main__':
         if len(annots_pdf) == 0:
             with open(mark_path, "w") as f:
                 f.write("vim: filetype=markdown.linked :\n")
-                f.write("[source](" + str(source_path) + ")\n")
+                f.write("[source](" + str(source_name) + ")\n")
         else:
             if mark_path.exists():
                 f = open(mark_path, "a")
@@ -114,7 +120,7 @@ if __name__ == '__main__':
 
             # get negative intersection and append to markdown file
             for content in annots_pdf.difference(annots_md):
-                a = "{}#{}".format(source_path, content)
+                a = "{}#{}".format(source_name, content)
 
                 if len(content) > 20:
                     # format to max length of 80chars
@@ -139,4 +145,4 @@ if __name__ == '__main__':
 
             f.close()
 
-    print(" - [{}]({})".format(mark_path.stem, mark_path))
+        print(" - [{}]({})".format(mark_path.stem, mark_name))

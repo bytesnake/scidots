@@ -125,3 +125,7 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 #source /etc/profile.d/bash_completion.sh
+source /etc/profile.d/bash_completion.sh
+
+# expand shell variables on autocomplete
+shopt -s direxpand
