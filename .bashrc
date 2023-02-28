@@ -14,6 +14,7 @@ export TERMINAL=/usr/bin/terminator
 
 # add local binaries to path
 export PATH=$PATH:$HOME/.local/bin:$HOME/.cargo/bin/
+export LD_LIBRARY_PATH=/home/losch/.miniconda3/lib/python3.9/site-packages/PyQt5/Qt5/lib/
 
 # If not running interactively, don't do more
 [[ $- != *i* ]] && return

@@ -14,10 +14,14 @@ Plug 'inkarkat/vim-mark'
 " zotero citations are awesome
 Plug 'jalvesaq/zotcite'
 
+" tags for easier browsing
+Plug 'preservim/tagbar'
+
 " linked notes
 Plug 'mattn/libcallex-vim', { 'do': 'make -C autoload' }
-Plug 'bytesnake/vim-linked', { 'do': 'cargo install --release' }
-Plug 'bytesnake/vim-graphical-preview', { 'do': 'cargo install --release' }
+Plug 'bytesnake/vim-linked', { 'do': 'cargo build --release' }
+"Plug 'bytesnake/vim-graphical-preview', { 'do': 'cargo build --release' }
+Plug '/home/losch/Documents/vim-graphical-preview/'
 
 " Collection of common configurations for the Nvim LSP client
 "Plug 'neovim/nvim-lspconfig'
@@ -66,4 +70,5 @@ endfunction
 runtime look.vim
 runtime custom_bindings.vim
 runtime marks.vim
+runtime tags.vim
 " runtime rust-analyzer.vim
