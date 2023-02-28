@@ -7,6 +7,9 @@ Plug 'plasticboy/vim-markdown'
 " syntax highlighting
 Plug 'morhetz/gruvbox'
 
+" additional text objects
+Plug 'wellle/targets.vim'
+
 " highlight marks
 Plug 'inkarkat/vim-ingo-library'
 Plug 'inkarkat/vim-mark'
@@ -18,6 +21,9 @@ Plug 'jalvesaq/zotcite'
 Plug 'mattn/libcallex-vim', { 'do': 'make -C autoload' }
 Plug 'bytesnake/vim-linked', { 'do': 'cargo install --release' }
 Plug 'bytesnake/vim-graphical-preview', { 'do': 'cargo install --release' }
+
+" latex plugin
+Plug 'lervag/vimtex'
 
 " Collection of common configurations for the Nvim LSP client
 "Plug 'neovim/nvim-lspconfig'
@@ -50,18 +56,8 @@ cnoreabbrev cf Cfilter
 " add stashing feature
 command -nargs=? -complete=file Stash :read !stash <args>
 
-function! GetSyntaxID()
-    return synID(line('.'), col('.'), 1)
-endfunction
-
-function! GetSyntaxParentID()
-    return synIDtrans(GetSyntaxID())
-endfunction
-
-function! GetSyntax()
-    echo synIDattr(GetSyntaxID(), 'name')
-    exec "hi ".synIDattr(GetSyntaxParentID(), 'name')
-endfunction
+" use MuPDF as default reader for vimtex
+let g:vimtex_view_method = 'mupdf'
 
 runtime look.vim
 runtime custom_bindings.vim
