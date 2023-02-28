@@ -23,6 +23,7 @@ export LD_LIBRARY_PATH=/home/losch/.miniconda3/lib/python3.9/site-packages/PyQt5
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias wanip='dig +short myip.opendns.com @resolver1.opendns.com'
+alias epub2pdf='pandoc -V geometry:margin=0.5in -V papersize:a5 -f epub -t pdf'
 alias passold='PASSWORD_STORE_DIR=$HOME/.password-store-old/ pass'
 
 # add vim to neovim shorcut
@@ -124,7 +125,9 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-source /etc/profile.d/bash_completion.sh
+if [ -f /etc/profile.d/bash_completion.sh ]; then
+	source /etc/profile.d/bash_completion.sh
+fi
 
 # expand shell variables on autocomplete
 shopt -s direxpand
