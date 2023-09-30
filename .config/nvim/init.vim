@@ -17,10 +17,14 @@ Plug 'inkarkat/vim-mark'
 " zotero citations are awesome
 Plug 'jalvesaq/zotcite'
 
+" tags for easier browsing
+Plug 'preservim/tagbar'
+
 " linked notes
 Plug 'mattn/libcallex-vim', { 'do': 'make -C autoload' }
-Plug 'bytesnake/vim-linked', { 'do': 'cargo install --release' }
-Plug 'bytesnake/vim-graphical-preview', { 'do': 'cargo install --release' }
+Plug 'bytesnake/vim-linked', { 'do': 'cargo build --release' }
+"Plug 'bytesnake/vim-graphical-preview', { 'do': 'cargo build --release' }
+Plug '/home/losch/Documents/vim-graphical-preview/'
 
 " latex plugin
 Plug 'lervag/vimtex'
@@ -66,4 +70,5 @@ runtime look.vim
 runtime custom_bindings.vim
 runtime marks.vim
 runtime toot.vim
+runtime tags.vim
 " runtime rust-analyzer.vim
