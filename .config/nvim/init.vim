@@ -42,6 +42,9 @@ Plug 'simrat39/rust-tools.nvim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'nvim-lua/plenary.nvim'
 
+" Git support
+Plug 'tpope/vim-fugitive'
+
 call plug#end()
 
 " set spell checking to english+german
@@ -62,4 +65,5 @@ let g:vimtex_view_method = 'mupdf'
 runtime look.vim
 runtime custom_bindings.vim
 runtime marks.vim
+runtime toot.vim
 " runtime rust-analyzer.vim
