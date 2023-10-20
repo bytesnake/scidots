@@ -71,4 +71,6 @@ runtime custom_bindings.vim
 runtime marks.vim
 runtime toot.vim
 runtime tags.vim
+runtime mails.vim
+
 " runtime rust-analyzer.vim
