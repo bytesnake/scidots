@@ -1,0 +1,8 @@
+snippet bp "breakpoint" b
+breakpoint()
+endsnippet
+
+snippet bpnan "breakpoint if is nan" b
+if torch.any(torch.isnan(${0})):
+	breakpoint()
+endsnippet

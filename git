@@ -1,0 +1,32 @@
+[init]
+    defaultBranch = "main"
+
+[core]
+	editor = vim
+	pager = delta
+
+[user]
+	email = git@lorenzschmidt.com
+	name = Lorenz Schmidt
+
+[alias]
+	br = branch
+	b = branch
+	sw = switch
+
+[pager]
+	diff = delta
+	log = delta
+	reflog = delta
+	show = delta
+
+[delta]
+	plus-style = "syntax #012800"
+	minus-style = "syntax #340001"
+	syntax-theme = Monokai Extended
+	navigate = true
+	#side-by-side = true
+	line-numbers = true
+
+[interactive]
+	diffFilter = delta --color-only

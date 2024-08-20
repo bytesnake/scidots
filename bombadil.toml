@@ -1,0 +1,11 @@
+dotfiles_dir = ".bombadil"
+
+[settings]
+vars = [ "vars.toml" ]
+#posthooks = [ "echo HI" ]
+
+[settings.dots]
+bashrc = { source = "bashrc", target = ".bashrc" }
+tmux = { source = "tmux.conf", target = ".tmux.conf" }
+nvim = { source = "nvim", target = ".config/nvim" }
+git = { source = "git", target = ".gitconfig" }
