@@ -1,0 +1,9 @@
+#!/bin/bash
+
+get_page_title() {
+	wget --quiet -O - $1 \
+	  | sed -n -e 'H;${x;s!.*<head[^>]*>\(.*\)</head>.*!\1!;tnext;b;:next;s!.*<title>\(.*\)</title>.*!\1!p}'
+}
+
+echo " $(get_page_title $1) |-| $1" >> ~/Note/Observatorium.md
+

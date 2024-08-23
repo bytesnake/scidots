@@ -1,0 +1,47 @@
+#!/bin/bash
+
+slugify () {
+    echo "$1" | iconv -t ascii//TRANSLIT | sed -r s/[~\^]+//g | sed -r s/[^a-zA-Z0-9]+/-/g | sed -r s/^-+\|-+$//g | tr A-Z a-z
+}
+
+# try loading $P from bash configuration
+if [[ -z $P ]]; then
+    source ~/.bashrc
+
+    # if still not exist, bail out
+    if [[ -z $P ]]; then
+        >&2 echo "Could not find path to papers"
+        exit 1
+    fi;
+fi;
+
+# may also work: wget --no-parent -p -k <url> -P /tmp/stash/
+# download website
+curl -k -sA "Chrome" -L "$2" -o /tmp/website.html
+
+# extract title of website
+title="$(awk -vRS="</title>" '/<title>/{gsub(/.*<title>|\n+/,"");print;exit}' /tmp/website.html)"
+
+# slugify title and move file
+title=$(slugify "$title")
+htmlfile="$P/stash/$(slugify $title).html"
+
+mv /tmp/website.html $htmlfile
+
+# convert for cases of output artifact
+if [[ "$1" == "epub" ]]; then
+    file="${htmlfile%"html"}epub"
+    pandoc -f html -t epub3 -o $file $htmlfile
+    rm $htmlfile
+    foliate $file
+elif [[ "$1" == "pdf" ]]; then
+    file="${htmlfile%"html"}pdf"
+    pandoc -t html -o $file $htmlfile 
+    rm $htmlfile
+    evince $file
+elif [[ "$1" == "markdown" ]]; then
+    file="${htmlfile%"html"}md"
+    html2text --decode-errors=ignore --no-wrap-links --images-to-alt $htmlfile > $file
+    rm $htmlfile
+    terminator -e "nvim $file"
+fi;

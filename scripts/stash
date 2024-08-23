@@ -1,0 +1,148 @@
+#!/bin/env python
+import popplerqt5
+import argparse
+import PyQt5
+from pathlib import Path
+import os, sys, re, shutil
+
+def sanitize(name):
+    words = list(filter(None, re.split("[, \-!?:]+", name)))
+    return "-".join(words)
+
+def extract_from_md(path):
+    link_re = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+
+    if not path.exists():
+        return set()
+
+    with open(path, "r") as f:
+        links = filter(lambda x: x[1].startswith("/") or x[1].startswith("$"), link_re.findall(f.read()))
+        elms = map(lambda x: x[1].split('#', 1)[1] if x[1].count("#") > 0 else x[1], links)
+
+        return set(elms)
+
+def extract_links_from_md(path):
+    link_re = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+
+    with open(path, "r") as f:
+        links = filter(lambda x: x[1].startswith("/") or x[1].startswith("$"), link_re.findall(f.read()))
+        elms = map(lambda x: x[1].split('#', 1)[0], links)
+
+        return set(elms)
+
+def expand_path(link):
+    return Path(os.path.expandvars(link))
+            
+
+def extract_from_pdf(file):
+    doc = popplerqt5.Poppler.Document.load(str(file))
+    collected = []
+    for i in range(doc.numPages()):
+        page = doc.page(i)
+        annotations = page.annotations()
+        (pwidth, pheight) = (page.pageSize().width(), page.pageSize().height())
+        if len(annotations) == 0:
+            continue
+
+        for annotation in annotations:
+            if  isinstance(annotation, popplerqt5.Poppler.Annotation):
+                if(isinstance(annotation, popplerqt5.Poppler.HighlightAnnotation)):
+                    quads = annotation.highlightQuads()
+                    txt = ""
+                    link_txt = ""
+                    for quad in quads:
+                        rect = (quad.points[0].x() * pwidth,
+                                quad.points[0].y() * pheight,
+                                quad.points[2].x() * pwidth,
+                                quad.points[2].y() * pheight)
+                        bdy = PyQt5.QtCore.QRectF()
+                        bdy.setCoords(*rect)
+                        new_txt = str(page.text(bdy)) 
+                        txt = txt + new_txt
+
+                        if len(new_txt) > len(link_txt):
+                            link_txt = new_txt
+
+                        link_txt = link_txt.strip()
+
+                        # sanitaze brackets
+                        link_txt = link_txt.replace("(", "{").replace(")", "}")
+
+                        collected.append(link_txt)
+
+    return set(collected)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('fn')
+    args = parser.parse_args()
+
+    # create sanitized filename from source
+    path = Path(args.fn)
+
+    if path.name.endswith(".marks.md"):
+        # get links in mark file (and ensure that they all point to the same file)
+        links = extract_links_from_md(path)
+        assert len(links) == 1
+
+        source_path = Path(links.pop())
+    else:
+        filename = sanitize(path.stem)
+        source_path = (Path("$P/stash") / filename).with_suffix(path.suffix)
+
+    source_path, source_name = expand_path(source_path), source_path
+
+    # check whether file is already in stash folder
+    if not source_path.exists():
+        shutil.copy(path, source_path)
+
+    if source_path.suffix == ".pdf":
+        mark_path = source_path.with_suffix(".marks.md")
+        mark_name = source_name.with_suffix(".marks.md")
+
+        # extract all annotations from PDF
+        annots_pdf = extract_from_pdf(source_path)
+        # extract links from markdown
+        annots_md = extract_from_md(mark_path)
+
+        # create dummy file
+        if len(annots_pdf) == 0:
+            with open(mark_path, "w") as f:
+                f.write("vim: filetype=markdown.linked :\n")
+                f.write("[source](" + str(source_name) + ")\n")
+        else:
+            if mark_path.exists():
+                f = open(mark_path, "a")
+            else:
+                f = open(mark_path, "w")
+                f.write("vim: filetype=markdown.linked :\n")
+
+            # get negative intersection and append to markdown file
+            for content in annots_pdf.difference(annots_md):
+                a = "{}#{}".format(source_name, content)
+
+                if len(content) > 20:
+                    # format to max length of 80chars
+                    sent_len = 0
+                    words = []
+                    for word in content.split(" "):
+                        if sent_len + len(word) > 80:
+                            f.write(" > {}".format(" ".join(words)))
+                            sent_len = 0
+                            words = []
+                        else:
+                            words.append(word)
+                            sent_len += len(word) + 1
+                    
+                    if sent_len + len(" source") > 80:
+                        f.write(" > {}".format(" ".join(words)))
+                        f.write(" > [source]({})\n".format(a))
+                    else:
+                        f.write(" > {} [source]({})\n".format(" ".join(words), a))
+                else:
+                    f.write(" > [{}]({})\n".format(content, a))
+
+            f.close()
+
+        print(" - [{}]({})".format(mark_path.stem, mark_name))

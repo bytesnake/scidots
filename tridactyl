@@ -1,0 +1,8 @@
+bind ,e composite get_current_url | exclaim_quiet $HOME/.local/bin/stash_website epub
+bind ,p composite get_current_url | exclaim_quiet $HOME/.local/bin/stash_website pdf
+bind ,m composite get_current_url | exclaim_quiet $HOME/.local/bin/stash_website markdown
+bind ,, composite get_current_url | exclaim_quiet $HOME/.local/bin/bookmark
+blacklistadd pad.zettel.haus
+
+" add support for DBLP for citation search
+set searchurls.dblp https://dblp.org/search?q=

@@ -10,6 +10,7 @@ alias vim=nvim
 export EDITOR=/usr/bin/nvim
 export VISUAL=/usr/bin/nvim
 export TERMINAL=/usr/bin/terminator
+export PATH=$HOME/.local/scripts:$PATH
 
 # faster git access
 alias g=git\ log

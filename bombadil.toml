@@ -2,10 +2,18 @@ dotfiles_dir = ".bombadil"
 
 [settings]
 vars = [ "vars.toml" ]
-#posthooks = [ "echo HI" ]
 
 [settings.dots]
 bashrc = { source = "bashrc", target = ".bashrc" }
 tmux = { source = "tmux.conf", target = ".tmux.conf" }
 nvim = { source = "nvim", target = ".config/nvim" }
 git = { source = "git", target = ".gitconfig" }
+
+scripts = { source = "scripts", target = ".local/scripts" }
+
+[profiles.graphics]
+posthooks = [ "i3 reload" ]
+
+[profiles.graphics.dots]
+tridactyl = { source = "tridactyl", target = ".config/tridactyl/tridactylrc" }
+
