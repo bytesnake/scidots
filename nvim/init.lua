@@ -1,4 +1,5 @@
 require("config.lazy")
+require("custom_fns")
 
  -- set default tab width to four whitespaces
 vim.opt.tabstop = 4

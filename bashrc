@@ -15,6 +15,7 @@ export PATH=$HOME/.local/scripts:$PATH
 # faster git access
 alias g=git\ log
 alias gi="git"
+alias nvsim="nvidia-smi"
 
 source /usr/share/bash-completion/completions/git
 __git_complete g __git_main

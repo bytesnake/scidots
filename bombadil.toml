@@ -8,6 +8,7 @@ bashrc = { source = "bashrc", target = ".bashrc" }
 tmux = { source = "tmux.conf", target = ".tmux.conf" }
 nvim = { source = "nvim", target = ".config/nvim" }
 git = { source = "git", target = ".gitconfig" }
+ssh = { source = "ssh", target = ".ssh/config" }
 
 scripts = { source = "scripts", target = ".local/scripts" }
 
