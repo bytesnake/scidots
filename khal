@@ -1,0 +1,32 @@
+[calendars]
+  [[home]]
+    path = ~/.calendars/mailbox/Y2FsOi8vMC80NQ
+    color = dark green
+    priority = 20
+
+  [[sport]]
+    path = ~/.calendars/mailbox/Y2FsOi8vMC80Mw
+    color = dark blue
+    priority = 20
+
+  [[lang]]
+    path = ~/.calendars/mailbox/Y2FsOi8vMC80Mg
+    color = light red
+    priority = 20
+
+  [[work]]
+    path = ~/.calendars/mailbox/Y2FsOi8vMC80Ng
+    color = brown
+    priority = 20
+
+[locale]
+local_timezone= Europe/Berlin
+default_timezone= Europe/Berlin
+timeformat= %H:%M
+dateformat= %d.%m.
+longdateformat= %d.%m.%Y
+datetimeformat= %d.%m. %H:%M
+longdatetimeformat= %d.%m.%Y %H:%M
+
+[default]
+default_calendar = "home"

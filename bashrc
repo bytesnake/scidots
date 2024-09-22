@@ -35,3 +35,13 @@ jobscount() {
 weather() {
 	curl -4 http://wttr\.in/$1
 }
+
+pltsix() {
+	# plot a gnuplot command in SIXEL mode to top of screen
+	tput clear; 
+	while true; do 
+		tput cup 0 0; 
+		gnuplot -e "set terminal sixelgd enhanced truecolor size 1024,800" $@;
+		date; sleep 2;
+	done
+}
