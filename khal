@@ -30,3 +30,6 @@ longdatetimeformat= %d.%m.%Y %H:%M
 
 [default]
 default_calendar = "home"
+
+[view]
+frame = "color"
