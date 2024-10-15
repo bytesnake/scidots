@@ -1,6 +1,7 @@
 require("config.lazy")
 require("custom_fns")
 require("tooting")
+require('lualine').setup()
 
  -- set default tab width to four whitespaces
 vim.opt.tabstop = 4
