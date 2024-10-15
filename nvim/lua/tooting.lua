@@ -6,15 +6,15 @@ vim.api.nvim_create_user_command('Toot', function(opts)
 		text = text .. value .. "\n"
 	end
 
-	if vim.fn.executable('toot') ~= 1 then
-		print("No tooting command found in $PATH!")
-		return
-	end
+	--if vim.fn.executable('toot') ~= 1 then
+	--	print("No tooting command found in $PATH!")
+	--	return
+	--end
 
-	local job = vim.fn.jobstart("toot post -v public -t text/markdown '" .. text .. "'", {
+	local job = vim.fn.jobstart("toot post -v private -t text/markdown '" .. text .. "'", {
 		on_exit = function(jobid, data, event)
 			if data == 0 then
-				vim.notify("Toot successful", {title="Mighty Mastodon"})
+				vim.notify("Tooted successfully", "info", {title="Mighty Mastodon"})
 			else
 				vim.notify("Publishing toot was not successful :(", "error", {title="Mighty Mastodon"})
 			end

@@ -9,6 +9,8 @@ tmux = { source = "tmux.conf", target = ".tmux.conf" }
 nvim = { source = "nvim", target = ".config/nvim" }
 git = { source = "git", target = ".gitconfig" }
 ssh = { source = "ssh", target = ".ssh/config" }
+khal = { source = "khal", target = ".config/khal/config" }
+vdirsyncer = { source = "vdirsyncer", target = ".config/vdirsyncer/config" }
 
 scripts = { source = "scripts", target = ".local/scripts" }
 
@@ -17,4 +19,3 @@ posthooks = [ "i3 reload" ]
 
 [profiles.graphics.dots]
 tridactyl = { source = "tridactyl", target = ".config/tridactyl/tridactylrc" }
-

@@ -1,0 +1,20 @@
+[general]
+status_path = "~/.calendars/status"
+
+[pair my_calendars]
+a = "calendar"
+b = "mailbox_remote"
+collections = ["from a", "from b"]
+metadata = ["color"]
+
+[storage calendar]
+type = "filesystem"
+path = "~/.calendars/mailbox/"
+fileext = ".ics"
+
+[storage mailbox_remote]
+type = "caldav"
+
+url = "https://dav.mailbox.org/caldav/"
+username = "bytesnake@mailbox.org"
+password.fetch = ["command", "pass", "mailbox.org/bytesnake@mailbox.org"]
