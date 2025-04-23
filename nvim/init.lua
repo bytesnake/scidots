@@ -13,3 +13,5 @@ vim.cmd([[colorscheme gruvbox]])
 
 -- override notification with notify
 vim.notify = require("notify")
+
+vim.g.markdown_folding = 1
